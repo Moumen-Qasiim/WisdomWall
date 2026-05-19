@@ -1,0 +1,134 @@
+@model QuotesViewModel
+@{
+    ViewData["Title"] = "Quotes Board";
+}
+
+@functions {
+    public string TimeAgo(DateTime dt)
+    {
+        var ts = DateTime.UtcNow - dt;
+        if (ts.TotalSeconds < 0) return "Just now";
+        if (ts.TotalSeconds < 60) return "Just now";
+        if (ts.TotalMinutes < 60) return $"{(int)ts.TotalMinutes}m ago";
+        if (ts.TotalHours < 24) return $"{(int)ts.TotalHours}h ago";
+        if (ts.TotalDays < 30) return $"{(int)ts.TotalDays}d ago";
+        return dt.ToString("MMM dd, yyyy");
+    }
+}
+
+<div class="main-grid">
+    <!-- Left Column: Add Quote Form -->
+    <div class="form-sticky">
+        <div class="glass-card">
+            <h2 class="form-title">Share a Quote</h2>
+            <p class="form-subtitle">Add your voice to the wall of wisdom. No sign-up required.</p>
+            
+            <form asp-action="Create" asp-controller="Home" method="post" id="add-quote-form">
+                @Html.AntiForgeryToken()
+                
+                <div class="form-group">
+                    <label class="form-label" asp-for="NewQuote.Text">Quote Text</label>
+                    <textarea asp-for="NewQuote.Text" class="form-input" id="quote-text-input" placeholder="Type or paste the quote here..."></textarea>
+                    <span asp-validation-for="NewQuote.Text" class="validation-error"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" asp-for="NewQuote.Author">Author</label>
+                    <input asp-for="NewQuote.Author" class="form-input" id="quote-author-input" placeholder="Who said it? (e.g. Albert Einstein, Anonymous)" />
+                    <span asp-validation-for="NewQuote.Author" class="validation-error"></span>
+                </div>
+                
+                <button type="submit" class="btn-submit" id="submit-quote-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Post Quote
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Right Column: Quotes Feed -->
+    <div class="quotes-column">
+        @if (Model.Quotes != null && Model.Quotes.Any())
+        {
+            @foreach (var quote in Model.Quotes)
+            {
+                var initials = "";
+                if (!string.IsNullOrWhiteSpace(quote.Author))
+                {
+                    var parts = quote.Author.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length > 1)
+                    {
+                        initials = (parts[0][0].ToString() + parts[1][0].ToString()).ToUpper();
+                    }
+                    else if (parts.Length > 0)
+                    {
+                        initials = parts[0][0].ToString().ToUpper();
+                    }
+                }
+                if (string.IsNullOrEmpty(initials)) initials = "Q";
+
+                <div class="glass-card quote-card">
+                    <!-- SVG Block Quote Icon -->
+                    <svg class="quote-svg" viewBox="0 0 24 24">
+                        <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-4.765 2.627-5.023 5.409h4.028v10.44H14.017zm-11 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-4.795 2.627-5.053 5.409h4.057v10.44H3.017z" />
+                    </svg>
+                    
+                    <blockquote class="quote-text">
+                        “@quote.Text”
+                    </blockquote>
+                    
+                    <div class="quote-meta">
+                        <div class="quote-author">
+                            <div class="author-avatar">@initials</div>
+                            <span class="author-name">@quote.Author</span>
+                        </div>
+                        <span class="quote-date" title="@quote.CreatedAt.ToString("g")">
+                            @TimeAgo(quote.CreatedAt)
+                        </span>
+                    </div>
+                </div>
+            }
+
+            <!-- Pagination Controls -->
+            <div class="pagination-container">
+                @if (Model.HasPreviousPage)
+                {
+                    <a class="pagination-btn" asp-action="Index" asp-route-page="1" title="First Page">«</a>
+                    <a class="pagination-btn" asp-action="Index" asp-route-page="@(Model.CurrentPage - 1)" title="Previous Page">‹</a>
+                }
+                else
+                {
+                    <span class="pagination-btn disabled">«</span>
+                    <span class="pagination-btn disabled">‹</span>
+                }
+
+                <span class="pagination-info">Page @Model.CurrentPage of @Model.TotalPages</span>
+
+                @if (Model.HasNextPage)
+                {
+                    <a class="pagination-btn" asp-action="Index" asp-route-page="@(Model.CurrentPage + 1)" title="Next Page">›</a>
+                    <a class="pagination-btn" asp-action="Index" asp-route-page="@Model.TotalPages" title="Last Page">»</a>
+                }
+                else
+                {
+                    <span class="pagination-btn disabled">›</span>
+                    <span class="pagination-btn disabled">»</span>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="glass-card empty-state">
+                <h3 class="empty-state-title">No quotes yet</h3>
+                <p class="empty-state-text">Be the first to share an inspiring quote using the form.</p>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

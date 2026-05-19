@@ -1,0 +1,19 @@
+# Databases
+*.db
+*.db-journal
+
+# Build folders
+bin/
+obj/
+out/
+
+# IDE files
+.vs/
+.idea/
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS files
+.DS_Store
+Thumbs.db
