@@ -1,4 +1,4 @@
-namespace Quotes.com.Models;
+namespace WisdomWall.Models;
 
 public class ErrorViewModel
 {

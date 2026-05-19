@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
-using Quotes.com.Models;
+using WisdomWall.Models;
 
-namespace Quotes.com.Data;
+namespace WisdomWall.Data;
 
 public static class DbInitializer
 {

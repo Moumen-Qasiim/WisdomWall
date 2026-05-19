@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using Quotes.com.Models;
 
-namespace Quotes.com.Models;
+namespace WisdomWall.Models;
 
 public class QuotesViewModel
 {

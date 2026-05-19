@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Quotes.com.Data;
-using Quotes.com.Models;
+using WisdomWall.Data;
+using WisdomWall.Models;
 
-namespace Quotes.com.Controllers;
+namespace WisdomWall.Controllers;
 
 public class HomeController : Controller
 {

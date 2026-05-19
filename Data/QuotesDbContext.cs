@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Quotes.com.Models;
+using WisdomWall.Models;
 
-namespace Quotes.com.Data;
+namespace WisdomWall.Data;
 
 public class QuotesDbContext : DbContext
 {

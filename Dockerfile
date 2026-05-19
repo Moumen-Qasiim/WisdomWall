@@ -22,4 +22,4 @@ ENV ASPNETCORE_HTTP_PORTS=8080
 # Expose port 8080 for connection
 EXPOSE 8080
 
-ENTRYPOINT ["dotnet", "Quotes.com.dll"]
+ENTRYPOINT ["dotnet", "WisdomWall.dll"]

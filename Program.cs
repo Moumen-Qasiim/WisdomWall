@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Quotes.com.Data;
+using WisdomWall.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

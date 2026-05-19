@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Quotes.com.Models;
+namespace WisdomWall.Models;
 
 public class Quote
 {
